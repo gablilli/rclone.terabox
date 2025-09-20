@@ -192,15 +192,15 @@ jobs:
           make compile_all
         if: matrix.compile_all
 
-      - name: Deploy built binaries
-        run: |
-          if [[ "${{ matrix.os }}" == "ubuntu-latest" ]]; then make release_dep_linux ; fi
-          make ci_beta
+      # - name: Deploy built binaries
+        # run: |
+          # if [[ "${{ matrix.os }}" == "ubuntu-latest" ]]; then make release_dep_linux ; fi
+          # make ci_beta
         # env:
         # RCLONE_CONFIG_PASS: ${{ secrets.RCLONE_CONFIG_PASS }}
         # working-directory: '$(modulePath)'
         # Deploy binaries if enabled in config && not a PR && not a fork
-        if: true
+        # if: true
 
       - name: Upload binaries to GitHub Release
         if: github.ref_type == 'tag' && matrix.deploy
@@ -394,7 +394,5 @@ jobs:
       - name: Upload artifacts
         run: |
           make ci_upload
-        env:
-          RCLONE_CONFIG_PASS: ${{ secrets.RCLONE_CONFIG_PASS }}
         # Upload artifacts if not a PR && not a fork
-        if: true
+        if: github.event_name != 'pull_request' && github.repository == 'rclone/rclone'
