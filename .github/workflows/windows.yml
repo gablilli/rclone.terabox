@@ -15,14 +15,19 @@ jobs:
           repository: x1arch/rclone
           ref: backend/terabox
 
+      - name: List repo contents
+        run: dir
+
+      - name: List root contents recursively
+        run: dir /s
+
       - name: Set up Go
         uses: actions/setup-go@v4
         with:
           go-version: '1.22'
 
       - name: Build rclone.exe with winfsp tag
-        run: |
-          go build -tags winfsp -o rclone.exe
+        run: go build -tags winfsp -o rclone.exe ./ # o sostituisci ./ con la cartella corretta
 
       - name: Show rclone version and tags
         run: .\rclone.exe version
