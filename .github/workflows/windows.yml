@@ -15,21 +15,34 @@ jobs:
           repository: x1arch/rclone
           ref: backend/terabox
 
-      - name: List repo contents
-        shell: cmd
-        run: dir /s
-
       - name: Set up Go
         uses: actions/setup-go@v4
         with:
           go-version: '1.22'
 
-      - name: Build rclone.exe with winfsp tag
-        run: go build -tags cmount,gitremote -o rclone-terabox.exe
+      - name: Install WinFsp
+        run: |
+          Invoke-WebRequest -Uri https://github.com/winfsp/winfsp/releases/download/v2.0/winfsp-2.0.23075.msi -OutFile winfsp.msi
+          Start-Process msiexec.exe -Wait -ArgumentList '/i', 'winfsp.msi', '/quiet'
+        shell: powershell
 
-      - name: Show rclone version and tags
-        run: .\rclone-terabox.exe version
+      - name: Install Mingw-w64 (GCC for Windows)
+        run: choco install mingw -y
 
+      - name: Add Mingw to PATH
+        run: |
+          echo "C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8
+        shell: powershell
+
+      - name: Set Env Vars for WinFsp headers and libs
+        run: |
+          echo "CGO_CFLAGS=-IC:\Program Files (x86)\WinFsp\inc" >> $env:GITHUB_ENV
+          echo "CGO_LDFLAGS=-LC:\Program Files (x86)\WinFsp\lib -lwinfsp" >> $env:GITHUB_ENV
+        shell: powershell
+
+      - name: Build rclone with mount support
+        run: go build -tags cmount -o rclone-terabox.exe
+  
       - name: Upload rclone.exe artifact
         uses: actions/upload-artifact@v4
         with:
