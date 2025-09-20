@@ -25,13 +25,24 @@ jobs:
           go-version: '1.22'
 
       - name: Build rclone.exe with winfsp tag
-        run: go build -tags winfsp -o rclone.exe ./ # o sostituisci ./ con la cartella corretta
+        run: go build -tags cmount,gitremote -o rclone-terabox.exe
 
       - name: Show rclone version and tags
-        run: .\rclone.exe version
+        run: .\rclone-terabox.exe version
 
       - name: Upload rclone.exe artifact
         uses: actions/upload-artifact@v4
         with:
           name: rclone-terabox-windows
-          path: rclone.exe
+          path: rclone-terabox.exe
+
+      - name: Create/Update Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: latest
+          name: "TeraBox R-Clone v1-alpha"
+          body: "Compiled .exe for rclone with terabox"
+          files: rclone-terabox.exe
+          overwrite_files: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
