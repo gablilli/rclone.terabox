@@ -208,7 +208,7 @@ jobs:
           tag_name: latest
           name: "Latest Release"
           body: "Terabox Compiled rclone"
-          files: build/rclone*
+          files: build/*
           overwrite_files: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -396,5 +396,4 @@ jobs:
       - name: Upload artifacts
         run: |
           make ci_upload
-        # Upload artifacts if not a PR && not a fork
-        if: github.event_name != 'pull_request' && github.repository == 'rclone/rclone'
+        if: true
