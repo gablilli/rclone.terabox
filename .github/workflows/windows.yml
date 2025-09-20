@@ -36,10 +36,10 @@ jobs:
 
       - name: Set Env Vars for WinFsp headers and libs
         run: |
-          echo "CGO_CFLAGS=-IC:\Program Files (x86)\WinFsp\inc" >> $env:GITHUB_ENV
-          echo "CGO_LDFLAGS=-LC:\Program Files (x86)\WinFsp\lib -lwinfsp" >> $env:GITHUB_ENV
+          echo 'CGO_CFLAGS="-IC:\\Progra~2\\WinFsp\\inc"' >> $env:GITHUB_ENV
+          echo 'CGO_LDFLAGS="-LC:\\Progra~2\\WinFsp\\lib -lwinfsp"' >> $env:GITHUB_ENV
         shell: powershell
-
+  
       - name: Build rclone with mount support
         run: go build -tags cmount -o rclone-terabox.exe
   
