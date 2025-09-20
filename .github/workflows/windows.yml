@@ -1,0 +1,31 @@
+name: Build rclone Terabox (Windows)
+
+on:
+  workflow_dispatch:
+  push:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout fork with PR
+        uses: actions/checkout@v3
+        with:
+          repository: x1arch/rclone
+          ref: backend/terabox
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.22'
+
+      - name: Build rclone.exe
+        run: |
+          go build -o rclone.exe
+
+      - name: Upload rclone.exe artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: rclone-terabox-windows
+          path: rclone.exe
