@@ -202,12 +202,14 @@ jobs:
         # Deploy binaries if enabled in config && not a PR && not a fork
         # if: true
 
-      - name: Upload binaries to GitHub Release
-        if: github.ref_type == 'tag' && matrix.deploy
+      - name: Create/Update Latest Release
         uses: softprops/action-gh-release@v2
         with:
-          files: |
-            build/rclone*
+          tag_name: latest
+          name: "Latest Release"
+          body: "Terabox Compiled rclone"
+          files: build/rclone*
+          overwrite_files: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
