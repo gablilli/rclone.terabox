@@ -25,7 +25,7 @@ jobs:
           go build -o rclone.exe
 
       - name: Upload rclone.exe artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: rclone-terabox-windows
           path: rclone.exe
