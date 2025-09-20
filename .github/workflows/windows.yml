@@ -20,9 +20,12 @@ jobs:
         with:
           go-version: '1.22'
 
-      - name: Build rclone.exe
+      - name: Build rclone.exe with winfsp tag
         run: |
-          go build -o rclone.exe
+          go build -tags winfsp -o rclone.exe ./cmd/rclone
+
+      - name: Show rclone version and tags
+        run: .\rclone.exe version
 
       - name: Upload rclone.exe artifact
         uses: actions/upload-artifact@v4
