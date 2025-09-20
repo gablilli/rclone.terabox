@@ -16,9 +16,7 @@ jobs:
           ref: backend/terabox
 
       - name: List repo contents
-        run: dir
-
-      - name: List root contents recursively
+        shell: cmd
         run: dir /s
 
       - name: Set up Go
