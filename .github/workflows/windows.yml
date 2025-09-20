@@ -22,7 +22,7 @@ jobs:
 
       - name: Build rclone.exe with winfsp tag
         run: |
-          go build -tags winfsp -o rclone.exe ./cmd/rclone
+          go build -tags winfsp -o rclone.exe
 
       - name: Show rclone version and tags
         run: .\rclone.exe version
