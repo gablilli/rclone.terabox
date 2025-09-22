@@ -20,13 +20,16 @@ jobs:
         with:
           go-version: ">=1.25.0-rc.1"
 
-      - name: Build rclone.exe
+      - name: Install WinFsp (per supporto mount)
+        run: choco install -y winfsp
+
+      - name: Build rclone.exe with mount support
         run: |
-          go build -o rclone.exe
+          set CGO_ENABLED=1
+          go build -tags cmount -o rclone.exe
 
       - name: Verify binary
-        run: |
-          dir rclone.exe
+        run: .\rclone.exe version
 
       - name: Prepare dist folder
         run: |
