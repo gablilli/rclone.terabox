@@ -189,7 +189,11 @@ jobs:
     name: "lint"
     runs-on: ubuntu-latest
     steps:
-      # (stesso contenuto che hai già, non tocco)
+      - name: Get runner parameters
+        id: get-runner-parameters
+        run: |
+          echo "year-week=$(/bin/date -u "+%Y%V")" >> $GITHUB_OUTPUT
+          echo "runner-os-version=$ImageOS" >> $GITHUB_OUTPUT
 
   android:
     if: inputs.manual || (github.repository == 'rclone/rclone' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.event.pull_request.base.repo.full_name))
