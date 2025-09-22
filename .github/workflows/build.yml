@@ -177,13 +177,14 @@ jobs:
         if: matrix.compile_all
 
       - name: List build output
-        run: ls -R build || echo "no build dir"
+        run: ls -R bin || echo "no bin dir"
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
           name: build-${{ matrix.job_name }}
-          path: build/**
+          path: bin/**
+          if-no-files-found: error
 
   lint:
     if: inputs.manual || (github.repository == 'rclone/rclone' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.event.pull_request.base.repo.full_name))
@@ -230,13 +231,14 @@ jobs:
       # build android ABI vari (invariati)...
 
       - name: List android build output
-        run: ls -R build || echo "no build dir"
+        run: ls -R bin || echo "no bin dir"
 
       - name: Upload android artifacts
         uses: actions/upload-artifact@v4
         with:
           name: build-android
-          path: build/**
+          path: bin/**
+          if-no-files-found: error
 
   release:
     name: "Create Release"
