@@ -1,0 +1,41 @@
+name: build-rclone-windows
+
+on:
+  push:
+    branches:
+      - backend/terabox
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Set up Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: ">=1.25.0-rc.1"
+
+      - name: Build rclone.exe
+        run: |
+          go build -o rclone.exe
+
+      - name: Verify binary
+        run: |
+          dir rclone.exe
+
+      - name: Prepare dist folder
+        run: |
+          mkdir dist
+          copy rclone.exe dist\
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: rclone-windows
+          path: dist\rclone.exe
+          if-no-files-found: error
