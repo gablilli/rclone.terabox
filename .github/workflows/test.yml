@@ -1,0 +1,47 @@
+# Nome del workflow, visibile nella tab "Actions" di GitHub
+name: Build Rclone for Windows
+
+# Specifica quando deve partire il workflow
+on:
+  # Esegui quando fai un push sul branch 'main'
+  push:
+    branches: [ "main" ]
+  # Permette di avviare il workflow manualmente dalla UI di GitHub
+  workflow_dispatch:
+
+jobs:
+  # Definisce un singolo "job" chiamato "build"
+  build:
+    # Specifica che il job deve girare su una macchina virtuale Windows
+    runs-on: windows-latest
+
+    steps:
+      # 1. Scarica il codice del tuo repository sul runner
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Installa e configura l'ambiente Go
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22' # Usa una versione recente di Go
+
+      # 3. Installa WinFsp (passaggio cruciale per il mount!)
+      # Usiamo il package manager Chocolatey, già presente sui runner Windows
+      - name: Install WinFsp
+        run: choco install winfsp -y
+
+      # 4. Esegui il comando di build con il tag per il mount
+      - name: Build rclone.exe
+        run: go build -tags cmount -o rclone.exe -v
+        # -o rclone.exe specifica il nome del file di output
+        # -v (verbose) mostra i nomi dei pacchetti durante la compilazione
+
+      # 5. Carica il file rclone.exe come artefatto
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          # Nome dell'artefatto che vedrai nella pagina del workflow
+          name: rclone-windows
+          # Percorso del file da caricare
+          path: rclone.exe
