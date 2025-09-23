@@ -48,10 +48,9 @@ jobs:
         shell: powershell
         run: |
           choco install -y winfsp zip
-          # Forza uso di cgo
           echo "CGO_ENABLED=1" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-          echo "CGO_CFLAGS=-IC:\"C:\Program Files (x86)\WinFsp\inc\fuse\"" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-          echo "CGO_LDFLAGS=-LC:\"C:\Program Files (x86)\WinFsp\lib\"" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          echo "CGO_CFLAGS=-IC:\Progra~2\WinFsp\inc\fuse" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          echo "CGO_LDFLAGS=-LC:\Progra~2\WinFsp\lib" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
       # ---- Build ----
       - name: Build rclone (with mount support)
